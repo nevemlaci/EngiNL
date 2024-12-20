@@ -95,8 +95,12 @@ add_library(
         src/System/sprite_renderer_system.hpp
         src/System/sprite_renderer_system.cpp
         src/export.hpp
-        src/System/custom_script_system.hpp
-        src/System/custom_script_system.cpp
+        src/Component/sprite_renderer.cpp
+        src/Component/sprite_renderer.cpp
+        src/Component/custom_script_holder.hpp
+        src/Component/custom_script_holder.hpp
+        src/Component/custom_script_holder.cpp
+        src/Interface/iscript.cpp
 )
 
 
@@ -123,10 +127,8 @@ target_link_libraries(
 target_include_directories(EngiNLCore PRIVATE vendor/include PRIVATE ${LUA_INCLUDE_DIR})
 
 add_executable(EngiNL main.cpp
-        src/Component/custom_script.hpp
-        src/Interface/IScript.hpp
-        example_script.hpp
-        src/Interface/IScript.cpp)
+        src/Interface/iscript.hpp
+        src/Interface/iscript.cpp)
 
 file(COPY resources DESTINATION ${CMAKE_BINARY_DIR})
 

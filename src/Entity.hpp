@@ -10,13 +10,17 @@
 #include <entt/entt.hpp>
 
 #include "Scene.hpp"
-#include "Component/custom_script.hpp"
+#include "Component/custom_script_holder.hpp"
+
+namespace EngiNL{
+    class IScript;
+}
 
 namespace EngiNL{
 
     class NLExport Entity{
         entt::entity m_entity;
-        Scene* m_scene;
+        Scene* const m_scene;
 
     public:
         Entity(entt::entity entity, Scene* scene);
@@ -26,6 +30,10 @@ namespace EngiNL{
         e_nodiscard
         entt::entity Get() const { return m_entity; }
 
+        e_nodiscard Scene* GetScene() {
+            return m_scene;
+        }
+
         template<typename... Components>
         void AddComponents(Components&&... components) {
             (AddComponent(std::forward<Components>(components)), ...);
@@ -34,15 +42,15 @@ namespace EngiNL{
         template<typename Component>
         requires (!std::derived_from<Component, IScript>)
         void AddComponent(Component&& component) {
-            m_scene->GetRegistry().emplace_or_replace<Component>(m_entity, component);
+            m_scene->GetRegistry().emplace_or_replace<Component>(m_entity, std::forward<Component>(component));
         }
 
-        template<typename Script>
-        requires std::derived_from<Script, IScript>
-        void EngiNL::Entity::AddComponent() {
-            auto script_ptr = std::make_unique<Script>(m_entity, m_scene);
-            Component::CustomScript script = {std::move(script_ptr)};
-            m_scene->GetRegistry().emplace_or_replace<Script>(m_entity, script);
+        template<typename Component>
+        requires (std::derived_from<Component, IScript>)
+        void AddComponent(Component&& component) {
+            auto scripts = m_scene->GetRegistry().try_get<ScriptHolder>(m_entity);
+            component.init(m_entity, m_scene);
+            scripts->m_scripts.push_back(std::make_unique<Component>(std::forward<Component>(component)));
         }
 
         template<typename Component>

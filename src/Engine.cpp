@@ -9,7 +9,7 @@ EngiNL::Engine::Engine() : m_window(nullptr), m_renderer(nullptr), m_asset_manag
 
     SDL_Init(SDL_INIT_AUDIO | SDL_INIT_VIDEO | SDL_INIT_EVENTS);
 
-    m_window = SDL_CreateWindow("", 800, 600,SDL_WINDOW_HIDDEN);
+    m_window = SDL_CreateWindow("", m_window_dimensions.w, m_window_dimensions.h,SDL_WINDOW_HIDDEN);
 
     auto numdriv = SDL_GetNumRenderDrivers();
     for(auto i = 0; i < numdriv; ++i) {
@@ -34,7 +34,7 @@ EngiNL::Scene& EngiNL::Engine::GetCurrentScene() {
 
 void EngiNL::Engine::Run() {
     while(!m_scene_queue.empty()) {
-        m_scene_queue.front().Update();
+        m_scene_queue.front().Run();
         m_scene_queue.pop();
     }
 }

@@ -16,5 +16,13 @@ namespace EngiNL::Component{
         operator SDL_FRect() const{
             return {position.x, position.y, scale.x, scale.y};
         }
+
+        [[nodiscard]] bool inside(SDL_FRect rect) const {
+            SDL_FRect this_rect = *this;
+            return SDL_HasRectIntersectionFloat(&this_rect, &rect);
+        }
+
+        static void start_system();
+        static void update_system();
     };
 }

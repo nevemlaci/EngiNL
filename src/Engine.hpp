@@ -11,6 +11,7 @@
 
 #include "AssetManager.hpp"
 #include "Scene.hpp"
+#include "Component/transform.hpp"
 
 
 namespace EngiNL{
@@ -25,6 +26,7 @@ namespace EngiNL{
 
     private:
         std::queue<Scene> m_scene_queue;
+        SDL_FRect m_window_dimensions = SDL_FRect{0, 0, 800, 600};
     public:
         Engine();
         ~Engine();
@@ -35,6 +37,14 @@ namespace EngiNL{
 
         Scene& PushScene();
         Scene& GetCurrentScene();
+
+        [[nodiscard]] SDL_FRect GetDimensions() const {
+            return m_window_dimensions;
+        }
+
+        unsigned long GetTargetFps() const {
+            return 0;
+        }
 
         AssetManager& GetAssetManager() {
             return m_asset_manager;

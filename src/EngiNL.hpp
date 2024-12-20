@@ -13,8 +13,6 @@
 #include "Maths/Vector2.hpp"
 #include "Component/sprite_renderer.hpp"
 #include "Component/transform.hpp"
-#include "Component/custom_script.hpp"
-#include "Interface/IScript.hpp"
 #include "System/sprite_renderer_system.hpp"
 
 namespace EngiNL{
